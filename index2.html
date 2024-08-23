@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conrad's Site</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            background-color: black;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 30px;
+        }
+        p {
+            font-size: 18px;
+        }
+        #waveCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome.</h1>
+    <p>Hiya! My name is Conrad! I live on the west coast. Americas to be specific. Pennsylvania to be even more specific. 41.2033° N, 77.1945° W to be as specific as possible.</p>
+    <p>I like to read, draw, cook, and mess around with computers and software!</p>
+    <canvas id="waveCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('waveCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        function drawWaves() {
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.strokeStyle = 'rgba(0, 150, 255, 0.7)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            const waveHeight = 30;
+            const waveLength = 0.02;
+            const speed = 0.02;
+            const offset = performance.now() * speed;
+
+            for (let x = 0; x < width; x += 2) {
+                let y = Math.sin(x * waveLength + offset) * waveHeight + height / 2;
+                ctx.lineTo(x, y);
+            }
+
+            ctx.lineTo(width, height);
+            ctx.lineTo(0, height);
+            ctx.closePath();
+            ctx.stroke();
+        }
+
+        function animate() {
+            drawWaves();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        animate();
+    </script>
+</body>
+</html>
